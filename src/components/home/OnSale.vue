@@ -64,7 +64,7 @@ const onSaleItemList: OnSaleItemInfo[] = [
     align-items: center;
     .title {
       display: flex;
-      justify-content: start;
+      justify-content: flex-start;
       align-items: center;
       text {
         font-family: Microsoft YaHei;

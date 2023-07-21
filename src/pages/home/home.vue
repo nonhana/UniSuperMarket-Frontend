@@ -53,6 +53,37 @@
     <view class="on-sale">
       <OnSale />
     </view>
+    <view class="side-goods">
+      <SideGoods :type="0" />
+      <SideGoods :type="1" />
+    </view>
+    <view class="filter-list">
+      <tm-row :width="690" :column="12">
+        <tm-col
+          v-for="(item, index) in filterList"
+          :key="index"
+          :height="74"
+          :col="3"
+          color="#F8F9FA"
+          @click="changeFilter(index)"
+        >
+          <text :style="{ color: filterColorList[index][0] }" class="title">{{
+            item.title
+          }}</text>
+          <view
+            :style="{ backgroundColor: filterColorList[index][1] }"
+            class="describe"
+          >
+            <text :style="{ color: filterColorList[index][2] }">{{
+              item.describe
+            }}</text>
+          </view>
+        </tm-col>
+      </tm-row>
+    </view>
+    <view class="goods-list">
+      <GoodsList />
+    </view>
   </tm-app>
 </template>
 
@@ -60,20 +91,26 @@
 import { ref, onMounted } from "vue";
 import notch from "@/little/notch.vue";
 import SlidePictures from "@/components/home/SlidePictures.vue";
-import OnSale from '@/components/home/OnSale.vue'
+import OnSale from "@/components/home/OnSale.vue";
+import SideGoods from "@/components/home/SideGoods.vue";
+import GoodsList from "@/components/home/GoodsList.vue";
 
-type ButtonInfo = {
+interface ButtonInfo {
   bottom: number;
   height: number;
   left: number;
   right: number;
   top: number;
   width: number;
-};
-type ChoiceItemInfo = {
+}
+interface ChoiceItemInfo {
   img: string;
   title: string;
-};
+}
+interface FilterItemInfo {
+  title: string;
+  describe: string;
+}
 
 const choicesList: ChoiceItemInfo[] = [
   {
@@ -97,6 +134,24 @@ const choicesList: ChoiceItemInfo[] = [
     title: "速食冷冻",
   },
 ];
+const filterList: FilterItemInfo[] = [
+  {
+    title: "全部",
+    describe: "猜你喜欢",
+  },
+  {
+    title: "时令",
+    describe: "当季优选",
+  },
+  {
+    title: "进口",
+    describe: "国际直采",
+  },
+  {
+    title: "人气",
+    describe: "大家在买",
+  },
+];
 
 let buttonInfo = ref<ButtonInfo>({
   bottom: 0,
@@ -108,9 +163,22 @@ let buttonInfo = ref<ButtonInfo>({
 });
 let position = ref<string>("海淀村中关村大厦");
 let keywords = ref<string>("");
+let filterColorList = ref<string[][]>([
+  ["#40AE36", "#40AE36", "#ffffff"],
+  ["#333333", "#F8F9FA", "#999999"],
+  ["#333333", "#F8F9FA", "#999999"],
+  ["#333333", "#F8F9FA", "#999999"],
+]);
 
 const handleSearch = () => {
   console.log(keywords.value);
+};
+const changeFilter = (index: number) => {
+  filterColorList.value = filterColorList.value.map((_, i) =>
+    i == index
+      ? ["#40AE36", "#40AE36", "#ffffff"]
+      : ["#333333", "#F8F9FA", "#999999"]
+  );
 };
 
 onMounted(() => {
@@ -193,7 +261,41 @@ onMounted(() => {
     color: #666666;
   }
 }
-.on-sale{
+.on-sale {
+  position: relative;
+  margin: 30rpx auto 0;
+}
+.side-goods {
+  position: relative;
+  width: 690rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30rpx auto 0;
+}
+.filter-list {
+  position: relative;
+  margin: 30rpx auto 0;
+  .title {
+    font-family: Microsoft YaHei;
+    font-size: 30rpx;
+    font-weight: 290;
+  }
+  .describe {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 114rpx;
+    height: 32rpx;
+    border-radius: 16rpx;
+    text {
+      font-family: Microsoft YaHei;
+      font-size: 22rpx;
+      font-weight: 290;
+    }
+  }
+}
+.goods-list {
   position: relative;
   margin: 30rpx auto 0;
 }
