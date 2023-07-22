@@ -30,7 +30,7 @@
         v-model="keywords"
         type="text"
         placeholder="吃出美好生活"
-        @confirm="handleSearch"
+        @click="toSearchPage"
       />
     </view>
     <view class="slide-pictures">
@@ -112,6 +112,11 @@ interface FilterItemInfo {
   describe: string;
 }
 
+const toSearchPage = () => {
+  uni.navigateTo({
+    url: "../search/search",
+  });
+};
 const choicesList: ChoiceItemInfo[] = [
   {
     img: "../../static/img/HomeChoice1.png",
@@ -170,9 +175,6 @@ let filterColorList = ref<string[][]>([
   ["#333333", "#F8F9FA", "#999999"],
 ]);
 
-const handleSearch = () => {
-  console.log(keywords.value);
-};
 const changeFilter = (index: number) => {
   filterColorList.value = filterColorList.value.map((_, i) =>
     i == index
@@ -183,7 +185,6 @@ const changeFilter = (index: number) => {
 
 onMounted(() => {
   buttonInfo.value = uni.getStorageSync("MenuButton");
-  console.log(buttonInfo.value);
 });
 </script>
 

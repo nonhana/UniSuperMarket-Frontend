@@ -75,6 +75,30 @@ const goodList = ref<GoodInfo[]>([
     good_price: 80,
     good_classifier: "分类1",
   },
+  {
+    good_id: 4,
+    good_name: "商品3",
+    good_img: "https://dummyimage.com/400X400",
+    good_labels: ["标签1", "标签5"],
+    good_price: 80,
+    good_classifier: "分类1",
+  },
+  {
+    good_id: 5,
+    good_name: "商品3",
+    good_img: "https://dummyimage.com/400X400",
+    good_labels: ["标签1", "标签5"],
+    good_price: 80,
+    good_classifier: "分类1",
+  },
+  {
+    good_id: 6,
+    good_name: "商品3",
+    good_img: "https://dummyimage.com/400X400",
+    good_labels: ["标签1", "标签5"],
+    good_price: 80,
+    good_classifier: "分类1",
+  },
 ]);
 
 function itemClick() {
