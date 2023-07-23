@@ -1,24 +1,22 @@
 <template>
   <tm-app color="#fff">
     <notch style="background-color: #f8f9fa" />
-    <view>
-      <view
-        :style="{
-          height: `${buttonInfo?.height}px`,
-        }"
-        style="background-color: #f8f9fa"
-      ></view>
-      <view class="head">
-        <img @click="back" class="icon" src="../../static/svg/Back.svg" />
-        <input
-          v-model="keywords"
-          class="search-box"
-          placeholder="吃出美好生活"
-          type="text"
-          @confirm="handleSearch"
-        />
-        <text @click="cancel">取消</text>
-      </view>
+    <view
+      :style="{
+        height: `${buttonInfo?.height}px`,
+      }"
+      style="background-color: #f8f9fa"
+    ></view>
+    <view class="head">
+      <img @click="back" class="icon" src="../../static/svg/Back.svg" />
+      <input
+        v-model="keywords"
+        class="search-box"
+        placeholder="吃出美好生活"
+        type="text"
+        @confirm="handleSearch"
+      />
+      <text @click="cancel">取消</text>
     </view>
     <view class="history">
       <History />
@@ -60,7 +58,9 @@ const back = () => {
   });
 };
 const handleSearch = () => {
-  console.log(keywords.value);
+  uni.navigateTo({
+    url: `../search/searchResult?keywords=${keywords.value}`,
+  });
 };
 const cancel = () => {
   keywords.value = "";

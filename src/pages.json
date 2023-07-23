@@ -19,6 +19,12 @@
       }
     },
     {
+      "path": "pages/search/searchResult",
+      "style": {
+        "navigationBarTitleText": "搜索"
+      }
+    },
+    {
       "path": "pages/classification/classification",
       "style": {
         "navigationBarTitleText": "分类"
