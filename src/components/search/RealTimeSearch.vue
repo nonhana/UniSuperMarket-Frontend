@@ -2,7 +2,12 @@
   <view class="RealTimeSearch-wrap">
     <text>实时热搜</text>
     <view class="label-list">
-      <view v-for="(item, index) in labelList" :key="index" class="label">
+      <view
+        @click="labelSearch(item.label_name)"
+        v-for="(item, index) in labelList"
+        :key="index"
+        class="label"
+      >
         <text>{{ index }}&nbsp;{{ item.label_name }}</text>
       </view>
     </view>
@@ -11,6 +16,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+
+const emits = defineEmits<{
+  (e: "labelSearch", label: string): void;
+}>();
 
 interface Label {
   label_id: number;
@@ -35,6 +44,10 @@ const labelList = ref<Label[]>([
     label_name: "标签4标签4标签4标签4",
   },
 ]);
+
+const labelSearch = (label: string) => {
+  emits("labelSearch", label);
+};
 </script>
 
 <style scoped lang="less">

@@ -39,6 +39,7 @@
     <view class="choice-list">
       <tm-row :width="690" :column="10">
         <tm-col
+          @click="toChoicePage(index)"
           :height="160"
           color="#F8F9FA"
           v-for="(item, index) in choicesList"
@@ -181,6 +182,11 @@ const changeFilter = (index: number) => {
       ? ["#40AE36", "#40AE36", "#ffffff"]
       : ["#333333", "#F8F9FA", "#999999"]
   );
+};
+const toChoicePage = (index: number) => {
+  uni.navigateTo({
+    url: `./choiceResult?index=${index}`,
+  });
 };
 
 onMounted(() => {

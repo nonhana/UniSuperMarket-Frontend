@@ -13,6 +13,12 @@
       }
     },
     {
+      "path": "pages/home/choiceResult",
+      "style": {
+        "navigationBarTitleText": "主页"
+      }
+    },
+    {
       "path": "pages/search/search",
       "style": {
         "navigationBarTitleText": "搜索"

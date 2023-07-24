@@ -1,7 +1,25 @@
 <template>
-  <view class="SearchResultItem-wrap">
-    <img class="item-img" :src="searchResultItem.item_img" />
-    <view class="item-info">
+  <view
+    :style="{
+      width: sizeList[0],
+      height: sizeList[1],
+    }"
+    class="SearchResultItem-wrap"
+  >
+    <img
+      :style="{
+        width: sizeList[1],
+        height: sizeList[1],
+      }"
+      :src="searchResultItem.item_img"
+    />
+    <view
+      :style="{
+        width: sizeList[2],
+        height: sizeList[1],
+      }"
+      class="item-info"
+    >
       <view class="head">
         <text class="title">{{ searchResultItem.item_name }}</text>
         <view class="label-list">
@@ -61,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 interface ShoppingCartInfo {
   item_id: number;
@@ -79,12 +97,14 @@ const props = defineProps<{
     item_origin_price: number;
     item_classifier: string;
   };
+  type: number;
 }>();
 
 const emits = defineEmits<{
   (e: "addShoppingCart", data: ShoppingCartInfo): void;
 }>();
 
+let sizeList: string[] = new Array(3).fill("");
 let itemCount = ref<number>(0);
 
 const addShoppingCart = () => {
@@ -94,24 +114,28 @@ const addShoppingCart = () => {
     item_count: itemCount.value,
   });
 };
+
+watch(
+  () => props.type,
+  (newV, _) => {
+    if (newV === 0) {
+      sizeList = ["690rpx", "240rpx", "420rpx"];
+    } else {
+      sizeList = ["540rpx", "220rpx", "310rpx"];
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped lang="less">
 .SearchResultItem-wrap {
   position: relative;
   margin-bottom: 30rpx;
-  width: 690rpx;
-  height: 240rpx;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .item-img {
-    width: 240rpx;
-    height: 240rpx;
-  }
   .item-info {
-    width: 420rpx;
-    height: 240rpx;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

@@ -19,16 +19,17 @@
       <text @click="cancel">取消</text>
     </view>
     <view class="history">
-      <History />
+      <History @label-search="labelSearch" />
     </view>
     <view class="real-time-search">
-      <RealTimeSearch />
+      <RealTimeSearch @label-search="labelSearch" />
     </view>
   </tm-app>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { onShow } from "@dcloudio/uni-app";
 import notch from "@/little/notch.vue";
 import History from "@/components/search/History.vue";
 import RealTimeSearch from "@/components/search/RealTimeSearch.vue";
@@ -62,10 +63,18 @@ const handleSearch = () => {
     url: `../search/searchResult?keywords=${keywords.value}`,
   });
 };
+const labelSearch = (label: string) => {
+  uni.navigateTo({
+    url: `../search/searchResult?keywords=${label}`,
+  });
+};
 const cancel = () => {
   keywords.value = "";
 };
 
+onShow(() => {
+  keywords.value = "";
+});
 onMounted(() => {
   buttonInfo.value = uni.getStorageSync("MenuButton");
 });

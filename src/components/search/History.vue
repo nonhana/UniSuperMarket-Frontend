@@ -10,7 +10,12 @@
       />
     </view>
     <view class="label-list">
-      <view v-for="(item, index) in labelList" :key="index" class="label">
+      <view
+        @click="labelSearch(item.label_name)"
+        v-for="(item, index) in labelList"
+        :key="index"
+        class="label"
+      >
         <text>{{ item.label_name }}</text>
       </view>
     </view>
@@ -30,6 +35,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+
+const emits = defineEmits<{
+  (e: "labelSearch", label: string): void;
+}>();
 
 interface Label {
   label_id: number;
@@ -59,6 +68,9 @@ let confirmClear = ref<boolean>(false);
 
 const clearHistory = () => {
   labelList.value.splice(0);
+};
+const labelSearch = (label: string) => {
+  emits("labelSearch", label);
 };
 </script>
 

@@ -27,38 +27,60 @@
         <img class="icon" src="../../static/svg/ShoppingCartNormal.svg" />
       </tm-badge>
     </view>
-    <view class="sort-bar">
-      <tm-row :width="750" :column="12">
-        <tm-col color="#fff" :height="90" :col="4">
-          <view class="sort-bar-item">
-            <text>价格</text>
-            <img class="icon" src="../../static/svg/SearchResultSort1.svg" />
+    <view class="choice-list">
+      <tm-row :width="750" :column="10">
+        <tm-col
+          @click="changeChoice(index)"
+          :height="180"
+          color="#F8F9FA"
+          v-for="(item, index) in choicesList"
+          :key="index"
+          :col="2"
+        >
+          <view
+            class="choice-img"
+            :style="{
+              border: `2rpx solid ${choicesColorList[index][0]}`,
+            }"
+          >
+            <img class="img" :src="item.img" />
           </view>
-        </tm-col>
-        <tm-col color="#fff" :height="90" :col="4">
-          <text>销量</text>
-        </tm-col>
-        <tm-col color="#fff" :height="90" :col="4">
-          <view class="sort-bar-item">
-            <text>筛选</text>
-            <img class="icon" src="../../static/svg/SearchResultSort2.svg" />
+          <view
+            class="choice-text"
+            :style="{
+              backgroundColor: choicesColorList[index][1],
+            }"
+          >
+            <text
+              :style="{
+                color: choicesColorList[index][2],
+              }"
+              >{{ item.title }}</text
+            >
           </view>
         </tm-col>
       </tm-row>
     </view>
-    <view v-if="searchResultList.length !== 0" class="item-list">
-      <SearchResultItem
-        v-for="(item, index) in searchResultList"
-        :key="index"
-        :search-result-item="item"
-        :type="0"
-        @addShoppingCart="updateShoppingCart"
-      />
-    </view>
-    <view v-else class="empty">
-      <img class="empty-img" src="../../static/svg/SearchResultEmpty.svg" />
-      <text>抱歉，没有找到相关的商品哦</text>
-    </view>
+    <tm-side-menu
+      v-model:active="active"
+      :height="1000"
+      :itemHeight="100"
+      :list="list"
+    >
+      <view v-if="searchResultList.length !== 0" style="margin: 10rpx">
+        <SearchResultItem
+          v-for="(item, index) in searchResultList"
+          :key="index"
+          :search-result-item="item"
+          :type="1"
+          @addShoppingCart="updateShoppingCart"
+        />
+      </view>
+      <view v-else class="empty">
+        <img class="empty-img" src="../../static/svg/SearchResultEmpty.svg" />
+        <text>抱歉，没有找到相关的商品哦</text>
+      </view>
+    </tm-side-menu>
   </tm-app>
 </template>
 
@@ -90,9 +112,51 @@ interface ShoppingCartInfo {
   item_id: number;
   item_count: number;
 }
+interface ChoiceItemInfo {
+  img: string;
+  title: string;
+}
 
+const active = ref<number>(0);
+const list = ref([
+  { text: "分类", id: 1 },
+  { text: "分类", id: 2 },
+  { text: "分类", id: 3 },
+  { text: "分类", id: 4 },
+  { text: "分类", id: 5 },
+  { text: "分类", id: 6 },
+  { text: "分类", id: 7 },
+  { text: "分类", id: 8 },
+  { text: "分类", id: 9 },
+  { text: "分类", id: 10 },
+  { text: "分类", id: 11 },
+  { text: "分类", id: 12 },
+]);
+const choicesList: ChoiceItemInfo[] = [
+  {
+    img: "../../static/img/HomeChoice1.png",
+    title: "水果蔬菜",
+  },
+  {
+    img: "../../static/img/HomeChoice2.png",
+    title: "水果蔬菜",
+  },
+  {
+    img: "../../static/img/HomeChoice3.png",
+    title: "肉禽蛋品",
+  },
+  {
+    img: "../../static/img/HomeChoice4.png",
+    title: "海鲜水产",
+  },
+  {
+    img: "../../static/img/HomeChoice5.png",
+    title: "速食冷冻",
+  },
+];
 const searchResultList = ref<SearchResultItemInfo[]>([]);
 
+let choicesColorList = ref<string[][]>([]);
 let shoppingCartCount = ref<number>(0);
 let keywords = ref<string>("");
 let buttonInfo = ref<ButtonInfo>({
@@ -127,13 +191,18 @@ const updateShoppingCart = (data: ShoppingCartInfo) => {
     shoppingCartCount.value += item.item_count;
   });
 };
+const changeChoice = (index: number) => {
+  choicesColorList.value = new Array(5).fill(["#fff", "#f8f9fa", "#666666"]);
+  choicesColorList.value[index] = ["#40AE36", "#40AE36", "#fff"];
+};
 
 onMounted(() => {
   buttonInfo.value = uni.getStorageSync("MenuButton");
 });
 
 onLoad((options: any) => {
-  keywords.value = options.keywords;
+  choicesColorList.value = new Array(5).fill(["#fff", "#f8f9fa", "#666666"]);
+  choicesColorList.value[options.index] = ["#40AE36", "#40AE36", "#fff"];
 });
 </script>
 
@@ -162,29 +231,37 @@ onLoad((options: any) => {
     background-position: 30rpx 20rpx;
   }
 }
-.sort-bar {
+.choice-list {
   position: relative;
-  text {
-    font-family: Microsoft YaHei;
-    font-size: 26rpx;
-    font-weight: 290;
-    color: #666666;
-  }
-  .icon {
-    margin-left: 10rpx;
-    width: 16rpx;
-    height: 20rpx;
-  }
-  &-item {
+  .choice-img {
+    width: 114rpx;
+    height: 114rpx;
+    border-radius: 57rpx;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #fff;
+    .img {
+      width: 108rpx;
+      height: 108rpx;
+    }
   }
-}
-.item-list {
-  position: relative;
-  width: 690rpx;
-  margin: 30rpx auto 0;
+  .choice-text {
+    width: max-content;
+    margin-top: 10rpx;
+    padding: 6rpx 12rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100rpx;
+    background: #40ae36;
+    text {
+      font-family: Microsoft YaHei;
+      font-size: 24rpx;
+      font-weight: 290;
+      color: #ffffff;
+    }
+  }
 }
 .empty {
   position: relative;
