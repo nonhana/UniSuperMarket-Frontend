@@ -6,9 +6,10 @@
         height: `${buttonInfo?.height}px`,
       }"
       style="background-color: #f8f9fa"
-    ></view>
+    >
+    </view>
     <view class="head">
-      <img @click="back" class="icon" src="../../static/svg/Back.svg" />
+      <img class="icon" src="../../static/svg/Back.svg" @click="back" />
       <input
         v-model="keywords"
         class="search-box"
@@ -38,21 +39,21 @@
           <view class="filter-details-head">
             <text>全部分类</text>
             <img
-              @click="filterStatus = !filterStatus"
               style="transform: rotate(180)"
               class="more"
               src="../../static/svg/ClassificationMore.svg"
+              @click="filterListAction(0)"
             />
           </view>
           <view class="filter-list">
             <view
-              @click="chooseFilter(index)"
               v-for="(filter, index) in filterList"
               :key="index"
               :style="{
                 backgroundColor: filterColorList[index][0],
               }"
               class="filter-list-item"
+              @click="chooseFilter(index)"
             >
               <text
                 :style="{
@@ -66,13 +67,13 @@
         <scroll-view class="filter" scroll-x="true">
           <view>
             <view
-              @click="chooseFilter(index)"
               v-for="(filter, index) in filterList"
               :key="index"
               :style="{
                 backgroundColor: filterColorList[index][0],
               }"
               class="filter-item"
+              @click="chooseFilter(index)"
             >
               <text
                 :style="{
@@ -84,23 +85,30 @@
           </view>
         </scroll-view>
         <img
-          @click="filterStatus = !filterStatus"
           class="more"
           src="../../static/svg/ClassificationMore.svg"
+          @click="filterListAction(1)"
         />
       </view>
-      <view v-if="searchResultList.length !== 0" style="margin: 10rpx">
-        <SearchResultItem
-          v-for="(item, index) in searchResultList"
-          :key="index"
-          :search-result-item="item"
-          :type="1"
-          @addShoppingCart="updateShoppingCart"
-        />
-      </view>
-      <view v-else class="empty">
-        <img class="empty-img" src="../../static/svg/SearchResultEmpty.svg" />
-        <text>抱歉，没有找到相关的商品哦</text>
+      <view
+        :style="{
+          filter: listBlur,
+        }"
+        style="transition: all 0.3s"
+      >
+        <view v-if="searchResultList.length !== 0" style="margin: 10rpx">
+          <SearchResultItem
+            v-for="(item, index) in searchResultList"
+            :key="index"
+            :search-result-item="item"
+            :type="1"
+            @addShoppingCart="updateShoppingCart"
+          />
+        </view>
+        <view v-else class="empty">
+          <img class="empty-img" src="../../static/svg/SearchResultEmpty.svg" />
+          <text>抱歉，没有找到相关的商品哦</text>
+        </view>
       </view>
     </tm-side-menu>
   </tm-app>
@@ -133,9 +141,12 @@ interface ShoppingCartInfo {
   item_id: number;
   item_count: number;
 }
+interface GoodType {
+  [key: string]: string | number;
+}
 
 const active = ref<number>(0);
-const list = ref([
+const list = ref<GoodType[]>([
   { text: "水果蔬菜", id: 1 },
   { text: "肉禽蛋品", id: 2 },
   { text: "海鲜水产", id: 3 },
@@ -203,6 +214,7 @@ let filterList = ref<string[]>([
 ]);
 let filterColorList = ref<string[][]>([]);
 let filterStatus = ref<boolean>(false);
+let listBlur = ref<string>("blur(0px)");
 
 const back = () => {
   uni.switchTab({
@@ -234,6 +246,14 @@ const chooseFilter = (index: number) => {
     "#666666",
   ]);
   filterColorList.value[index] = ["#40AE3620", "#333333"];
+};
+const filterListAction = (type: number) => {
+  filterStatus.value = !filterStatus.value;
+  if (type === 0) {
+    listBlur.value = "blur(0px)";
+  } else {
+    listBlur.value = "blur(4px)";
+  }
 };
 
 onMounted(() => {

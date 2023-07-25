@@ -7,6 +7,12 @@
   },
   "pages": [
     {
+      "path": "pages/goodsDetail/goodsDetail",
+      "style": {
+        "navigationBarTitleText": "商品信息"
+      }
+    },
+    {
       "path": "pages/home/home",
       "style": {
         "navigationBarTitleText": "主页"
