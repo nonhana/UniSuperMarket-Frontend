@@ -4,22 +4,18 @@
       autoplay
       :width="750"
       :height="750"
-      :list="listimg"
+      :list="goodImgList"
     ></tm-carousel>
   </div>
 </template>
 
 <script setup lang="ts">
-const listimg = [
-  "https://dummyimage.com/400X400",
-  "https://dummyimage.com/400X400",
-  "https://dummyimage.com/400X400",
-  "https://dummyimage.com/400X400",
-  "https://dummyimage.com/400X400",
-];
+defineProps<{
+  goodImgList: string[];
+}>();
 </script>
 
-<style scoped lang="less">
+<style scoped>
 .PictureSlides-wrap {
   position: relative;
   width: 750rpx;

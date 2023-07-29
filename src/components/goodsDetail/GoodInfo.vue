@@ -3,9 +3,9 @@
     <view class="head">
       <text>
         <text style="font-size: 22rpx">￥</text>
-        {{ goodInfo.good_current_price }}
+        {{ goodMainInfo.good_current_price }}
         <text style="font-size: 22rpx; color: #999999"
-          >/{{ goodInfo.good_classifier }}</text
+          >/{{ goodMainInfo.good_classifier }}</text
         >
         <text
           style="
@@ -15,12 +15,14 @@
             text-decoration: line-through;
           "
         >
-          ￥{{ goodInfo.good_origin_price }}/{{ goodInfo.good_classifier }}
+          ￥{{ goodMainInfo.good_origin_price }}/{{
+            goodMainInfo.good_classifier
+          }}
         </text>
       </text>
       <view class="labels">
         <view
-          v-for="(label, index) in goodInfo.good_labels.slice(0, 2)"
+          v-for="(label, index) in goodMainInfo.good_labels.slice(0, 2)"
           :key="index"
           class="labels-item"
         >
@@ -30,12 +32,12 @@
     </view>
     <view class="name">
       <text>
-        {{ goodInfo.good_name }}
+        {{ goodMainInfo.good_name }}
       </text>
     </view>
     <view class="foot">
       <view
-        v-for="(hallmark, index) in goodInfo.good_hallmarks"
+        v-for="(hallmark, index) in goodMainInfo.good_hallmarks"
         :key="index"
         :style="{
           backgroundColor: hallmarkColorList[index][0],
@@ -56,40 +58,25 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import type { MainInfo } from "@/utils/type";
 
-interface GoodInfo {
-  good_id: number;
-  good_name: string;
-  good_labels: string[];
-  good_current_price: number;
-  good_origin_price: number;
-  good_hallmarks: string[];
-  good_classifier: string;
-}
+const props = defineProps<{
+  goodId: number;
+  goodMainInfo: MainInfo;
+}>();
 
 let hallmarkColorList = ref<string[][]>([]);
 
-const goodInfo = ref<GoodInfo>({
-  good_id: 1,
-  good_name:
-    "Sample GoodSample GoodSample GoodSample GoodSample GoodSample GoodSample GoodSample GoodSample GoodSample GoodSample GoodSample GoodSample GoodSample Good",
-  good_labels: ["Electronics", "Smartphone", "Gadgets"],
-  good_current_price: 799,
-  good_origin_price: 999,
-  good_hallmarks: ["High Quality", "Certified"],
-  good_classifier: "份",
-});
-
 const changeHallmark = (index: number) => {
   hallmarkColorList.value = new Array(
-    goodInfo.value.good_hallmarks.length
+    props.goodMainInfo.good_hallmarks.length
   ).fill(["#fff", "#666666"]);
   hallmarkColorList.value[index] = ["#40AE36", "#fff"];
 };
 
 onMounted(() => {
   hallmarkColorList.value = new Array(
-    goodInfo.value.good_hallmarks.length
+    props.goodMainInfo.good_hallmarks.length
   ).fill(["#fff", "#666666"]);
   hallmarkColorList.value[0] = ["#40AE36", "#fff"];
 });

@@ -5,7 +5,7 @@
         v-for="(item, index) in goodList"
         :key="index"
         :img="item.good_img"
-        @click="itemClick"
+        @click="itemClick(item.good_id)"
       >
         <view class="item-wrap">
           <text class="name">{{ item.good_name }}</text>
@@ -101,9 +101,9 @@ const goodList = ref<GoodInfo[]>([
   },
 ]);
 
-function itemClick() {
+function itemClick(good_id: number) {
   uni.navigateTo({
-    url: "tree",
+    url: `../../pages/goodsDetail/goodsDetail?good_id=${good_id}`,
   });
 }
 </script>

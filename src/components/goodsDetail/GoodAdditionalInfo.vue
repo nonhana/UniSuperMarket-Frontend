@@ -15,12 +15,11 @@
 </template>
 
 <script setup lang="ts">
+import type { AdditionalInfo } from "@/utils/type";
+
 defineProps<{
-  additionalInfo: {
-    distribution: string;
-    service: string;
-    offers: string;
-  };
+  goodId: number;
+  additionalInfo: AdditionalInfo;
 }>();
 </script>
 
