@@ -7,12 +7,6 @@
   },
   "pages": [
     {
-      "path": "pages/shoppingCart/shoppingCart",
-      "style": {
-        "navigationBarTitleText": "购物车"
-      }
-    },
-    {
       "path": "pages/home/home",
       "style": {
         "navigationBarTitleText": "主页"
@@ -34,6 +28,12 @@
       "path": "pages/search/searchResult",
       "style": {
         "navigationBarTitleText": "搜索"
+      }
+    },
+    {
+      "path": "pages/shoppingCart/shoppingCart",
+      "style": {
+        "navigationBarTitleText": "购物车"
       }
     },
     {

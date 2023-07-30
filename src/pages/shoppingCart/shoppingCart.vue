@@ -2,7 +2,7 @@
   <tm-app color="#f8f9fa">
     <view class="head">
       <text class="title">购物车</text>
-      <text class="delete">删除</text>
+      <text @click="showWindow = !showWindow" class="delete">删除</text>
     </view>
     <view v-if="shoppingCart.length === 0" class="empty">
       <text class="empty-title">购物车空空如也</text>
@@ -15,13 +15,13 @@
       <view v-for="(item, index) in shoppingCart" :key="index">
         <tm-checkbox
           @click="chooseItem(item.item_id)"
+          v-model="item.item_choose"
           :round="10"
           color="orange"
         ></tm-checkbox>
         <ShoppingCartItem :shopping-cart-item="item" />
       </view>
     </view>
-
     <view class="bottom">
       <view class="choose-all">
         <tm-checkbox
@@ -43,11 +43,22 @@
         </view>
       </view>
     </view>
+    <tm-modal
+      color="white"
+      okColor="#40ae36"
+      cancelColor="#40ae36"
+      okLinear="left"
+      splitBtn
+      title="提示"
+      content="确定要删除该商品吗？"
+      v-model:show="showWindow"
+      @ok="confirmDelete"
+    ></tm-modal>
   </tm-app>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import { useStore } from "@/store";
 import type { ShoppingCartInfo } from "@/utils/type";
 import ShoppingCartItem from "@/little/ShoppingCartItem.vue";
@@ -56,19 +67,20 @@ let localShoppingCart = useStore();
 let shoppingCart = ref<ShoppingCartInfo[]>([]);
 let totalPrice = ref<number>(0);
 let selectAllStatus = ref<boolean>(false);
+let showWindow = ref<boolean>(false);
 
 const toPageHome = () => {
   uni.switchTab({
     url: "../home/home",
   });
 };
-const chooseItem = (item_id: number) => {
+const chooseItem = async (item_id: number) => {
+  console.log(shoppingCart.value);
+  await nextTick();
   if (item_id !== 0) {
     const index = shoppingCart.value.findIndex(
       (item) => item.item_id === item_id
     );
-    shoppingCart.value[index].item_choose =
-      !shoppingCart.value[index].item_choose;
     if (shoppingCart.value[index].item_choose) {
       totalPrice.value +=
         shoppingCart.value[index].item_price *
@@ -82,6 +94,9 @@ const chooseItem = (item_id: number) => {
       (item) => item.item_choose
     );
   } else {
+    shoppingCart.value.forEach((item) => {
+      item.item_choose = selectAllStatus.value;
+    });
     if (selectAllStatus.value) {
       totalPrice.value = shoppingCart.value.reduce(
         (total, item) => total + item.item_price * item.item_count,
@@ -91,6 +106,12 @@ const chooseItem = (item_id: number) => {
       totalPrice.value = 0;
     }
   }
+};
+const confirmDelete = async () => {
+  shoppingCart.value = shoppingCart.value.filter((item) => !item.item_choose);
+  localShoppingCart.shoppingCart = shoppingCart.value;
+  await nextTick();
+  showWindow.value = false;
 };
 
 watch(localShoppingCart.shoppingCart, (newV, _) => {
