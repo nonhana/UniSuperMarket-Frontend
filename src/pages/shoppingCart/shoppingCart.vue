@@ -11,23 +11,91 @@
         <text>去逛逛</text>
       </view>
     </view>
-    <view v-else></view>
+    <view v-else class="shopping-cart">
+      <view v-for="(item, index) in shoppingCart" :key="index">
+        <tm-checkbox
+          @click="chooseItem(item.item_id)"
+          :round="10"
+          color="orange"
+        ></tm-checkbox>
+        <ShoppingCartItem :shopping-cart-item="item" />
+      </view>
+    </view>
+
+    <view class="bottom">
+      <view class="choose-all">
+        <tm-checkbox
+          @click="chooseItem(0)"
+          :round="10"
+          color="orange"
+          v-model="selectAllStatus"
+          label="全选"
+        ></tm-checkbox>
+      </view>
+      <view class="payment">
+        <text class="payment-price">
+          合计:
+          <text style="font-size: 22rpx">￥</text>
+          {{ totalPrice }}
+        </text>
+        <view class="payment-button">
+          <text>去结算</text>
+        </view>
+      </view>
+    </view>
   </tm-app>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useStore } from "@/store";
 import type { ShoppingCartInfo } from "@/utils/type";
+import ShoppingCartItem from "@/little/ShoppingCartItem.vue";
 
 let localShoppingCart = useStore();
 let shoppingCart = ref<ShoppingCartInfo[]>([]);
+let totalPrice = ref<number>(0);
+let selectAllStatus = ref<boolean>(false);
 
 const toPageHome = () => {
   uni.switchTab({
     url: "../home/home",
   });
 };
+const chooseItem = (item_id: number) => {
+  if (item_id !== 0) {
+    const index = shoppingCart.value.findIndex(
+      (item) => item.item_id === item_id
+    );
+    shoppingCart.value[index].item_choose =
+      !shoppingCart.value[index].item_choose;
+    if (shoppingCart.value[index].item_choose) {
+      totalPrice.value +=
+        shoppingCart.value[index].item_price *
+        shoppingCart.value[index].item_count;
+    } else {
+      totalPrice.value -=
+        shoppingCart.value[index].item_price *
+        shoppingCart.value[index].item_count;
+    }
+    selectAllStatus.value = shoppingCart.value.every(
+      (item) => item.item_choose
+    );
+  } else {
+    if (selectAllStatus.value) {
+      totalPrice.value = shoppingCart.value.reduce(
+        (total, item) => total + item.item_price * item.item_count,
+        0
+      );
+    } else {
+      totalPrice.value = 0;
+    }
+  }
+};
+
+watch(localShoppingCart.shoppingCart, (newV, _) => {
+  shoppingCart.value = newV;
+});
 
 onMounted(() => {
   shoppingCart.value = localShoppingCart.shoppingCart;
@@ -67,7 +135,7 @@ onMounted(() => {
   width: 720rpx;
   height: 300rpx;
   margin: 15rpx auto 0;
-  border-radius: 10px;
+  border-radius: 20rpx;
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -100,6 +168,67 @@ onMounted(() => {
       font-size: 26rpx;
       font-weight: 290;
       color: #40ae36;
+    }
+  }
+}
+.shopping-cart {
+  position: relative;
+  width: 700rpx;
+  margin: 15rpx auto 0;
+  padding: 10rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  view {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+.bottom {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 710rpx;
+  height: 100rpx;
+  padding: 0 20rpx;
+  background: #ffffff;
+  .choose-all {
+    display: flex;
+    align-items: center;
+    text {
+      margin-left: 10rpx;
+      font-family: Microsoft YaHei;
+      font-size: 24rpx;
+      font-weight: 290;
+      color: #333333;
+    }
+  }
+  .payment {
+    display: flex;
+    align-items: center;
+    &-price {
+      margin-right: 20rpx;
+      font-family: Microsoft YaHei;
+      font-size: 32rpx;
+      font-weight: 290;
+      color: #333333;
+    }
+    &-button {
+      width: 180rpx;
+      height: 70rpx;
+      border-radius: 100rpx;
+      background: #40ae36;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text {
+        font-family: Microsoft YaHei;
+        font-size: 26rpx;
+        font-weight: 290;
+        color: #ffffff;
+      }
     }
   }
 }

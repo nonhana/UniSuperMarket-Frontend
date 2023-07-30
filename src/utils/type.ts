@@ -48,7 +48,13 @@ interface ShoppingCartItemInfo {
 }
 // 购物车item信息
 export interface ShoppingCartInfo {
+  item_choose: boolean;
   item_id: number;
+  item_name: string;
+  item_img: string;
+  item_labels: string[];
   item_count: number;
+  item_price: number;
+  item_origin_price: number;
   item_info: ShoppingCartItemInfo[];
 }
