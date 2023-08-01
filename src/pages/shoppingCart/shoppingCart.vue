@@ -38,7 +38,7 @@
           <text style="font-size: 22rpx">￥</text>
           {{ totalPrice }}
         </text>
-        <view class="payment-button">
+        <view @click="toPageDeal" class="payment-button">
           <text>去结算</text>
         </view>
       </view>
@@ -72,6 +72,14 @@ let showWindow = ref<boolean>(false);
 const toPageHome = () => {
   uni.switchTab({
     url: "../home/home",
+  });
+};
+const toPageDeal = () => {
+  const choosedGoods = shoppingCart.value
+    .filter((item) => item.item_choose)
+    .map((item) => item.item_id);
+  uni.navigateTo({
+    url: `./confirmDeal?goods_id=${choosedGoods}`,
   });
 };
 const chooseItem = async (item_id: number) => {

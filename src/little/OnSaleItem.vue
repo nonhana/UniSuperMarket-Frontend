@@ -1,6 +1,10 @@
 <template>
   <view class="OnSaleItem-wrap">
-    <img class="item-picture" :src="onSaleItem.item_img" />
+    <img
+      @click="toDetailPage"
+      class="item-picture"
+      :src="onSaleItem.item_img"
+    />
     <text>{{ onSaleItem.item_name }}</text>
     <view class="foot-info">
       <text>
@@ -13,16 +17,17 @@
 </template>
 
 <script setup lang="ts">
-type OnSaleItemInfo = {
-  item_id: number;
-  item_img: string;
-  item_name: string;
-  item_price: number;
-};
+import type { OnSaleItemInfo } from "@/utils/type";
 
-defineProps<{
+const props = defineProps<{
   onSaleItem: OnSaleItemInfo;
 }>();
+
+const toDetailPage = () => {
+  uni.navigateTo({
+    url: `../goodsDetail/goodsDetail?good_id=${props.onSaleItem.item_id}`,
+  });
+};
 </script>
 
 <style scoped lang="less">

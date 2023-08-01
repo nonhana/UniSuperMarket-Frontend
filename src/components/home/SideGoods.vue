@@ -8,10 +8,11 @@
     </text>
     <view class="img-list">
       <img
-        v-for="(item, index) in sideDetail.img_list"
+        @click="toDetailPage(item.good_id)"
+        v-for="(item, index) in sideDetail.good_list"
         :key="index"
         class="img"
-        :src="item"
+        :src="item.good_img"
       />
     </view>
   </view>
@@ -19,12 +20,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-
-interface SideInfo {
-  title: string;
-  second_title: string;
-  img_list: string[];
-}
+import type { SideInfo } from "@/utils/type";
 
 const props = defineProps<{
   type: number;
@@ -33,8 +29,14 @@ const props = defineProps<{
 let sideDetail = ref<SideInfo>({
   title: "",
   second_title: "",
-  img_list: [],
+  good_list: [],
 });
+
+const toDetailPage = (good_id: number) => {
+  uni.navigateTo({
+    url: `../goodsDetail/goodsDetail?good_id=${good_id}`,
+  });
+};
 
 watch(
   () => props.type,
@@ -42,16 +44,28 @@ watch(
     if (newV === 0) {
       sideDetail.value.title = "吃好点";
       sideDetail.value.second_title = "美国小木瓜尝鲜";
-      sideDetail.value.img_list = [
-        "https://dummyimage.com/400X400",
-        "https://dummyimage.com/400X400",
+      sideDetail.value.good_list = [
+        {
+          good_id: 0,
+          good_img: "https://dummyimage.com/400X400",
+        },
+        {
+          good_id: 1,
+          good_img: "https://dummyimage.com/400X400",
+        },
       ];
     } else {
       sideDetail.value.title = "产地量贩";
       sideDetail.value.second_title = "核桃19.9元/箱";
-      sideDetail.value.img_list = [
-        "https://dummyimage.com/400X400",
-        "https://dummyimage.com/400X400",
+      sideDetail.value.good_list = [
+        {
+          good_id: 0,
+          good_img: "https://dummyimage.com/400X400",
+        },
+        {
+          good_id: 1,
+          good_img: "https://dummyimage.com/400X400",
+        },
       ];
     }
   },

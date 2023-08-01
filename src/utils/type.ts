@@ -53,8 +53,41 @@ export interface ShoppingCartInfo {
   item_name: string;
   item_img: string;
   item_labels: string[];
+  item_specification: string[];
   item_count: number;
   item_price: number;
   item_origin_price: number;
   item_info: ShoppingCartItemInfo[];
+}
+// 确认订单时的商品信息
+export interface DealGoodInfo {
+  good_id: number;
+  good_name: string;
+  good_img: string;
+  good_count: number;
+  good_price: number;
+  good_specification: string;
+}
+
+// 付款信息
+export interface DealInfo {
+  deal_price: number;
+  deal_time: string;
+  deal_payment_method: string;
+}
+// 促销商品信息
+export interface OnSaleItemInfo {
+  item_id: number;
+  item_img: string;
+  item_name: string;
+  item_price: number;
+}
+// 首页侧边栏商品信息
+export interface SideInfo {
+  title: string;
+  second_title: string;
+  good_list: {
+    good_id: number;
+    good_img: string;
+  }[];
 }

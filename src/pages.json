@@ -37,6 +37,18 @@
       }
     },
     {
+      "path": "pages/shoppingCart/confirmDeal",
+      "style": {
+        "navigationBarTitleText": "购物车"
+      }
+    },
+    {
+      "path": "pages/shoppingCart/dealSuccess",
+      "style": {
+        "navigationBarTitleText": "购物车"
+      }
+    },
+    {
       "path": "pages/classification/classification",
       "style": {
         "navigationBarTitleText": "分类"

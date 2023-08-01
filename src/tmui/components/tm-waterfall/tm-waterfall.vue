@@ -59,7 +59,7 @@ const props = defineProps({
   isLoadPlaceholderTransprent: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 //容器的宽度
@@ -124,10 +124,12 @@ function clear() {
 function countPushSort(item: itemParenSG) {
   //当前数据是
   let dir = _containerHeight.value.left > _containerHeight.value.right ? 1 : 0;
-  let bottom = _totalSort.value[dir][_totalSort.value[dir].length - 1]?.bottom ?? 0;
+  let bottom =
+    _totalSort.value[dir][_totalSort.value[dir].length - 1]?.bottom ?? 0;
   item.top = bottom + uni.upx2px(props.gutter);
   item.bottom = item.top + item.height;
-  item.left = dir == 0 ? 0 : uni.upx2px(_itemRealWidth.value) + uni.upx2px(props.gutter);
+  item.left =
+    dir == 0 ? 0 : uni.upx2px(_itemRealWidth.value) + uni.upx2px(props.gutter);
   let index = _list.value.findIndex((el) => el.id == item.id);
   _totalSort.value[dir].push(item);
   if (index > -1) {

@@ -20,14 +20,8 @@
 </template>
 
 <script setup lang="ts">
+import type { OnSaleItemInfo } from "@/utils/type";
 import OnSaleItem from "@/little/OnSaleItem.vue";
-
-type OnSaleItemInfo = {
-  item_id: number;
-  item_img: string;
-  item_name: string;
-  item_price: number;
-};
 
 const onSaleItemList: OnSaleItemInfo[] = [
   {
