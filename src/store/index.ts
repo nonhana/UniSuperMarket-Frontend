@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { ShoppingCartInfo } from "@/utils/type";
+import type { ShoppingCartInfo, UserInfo } from "@/utils/type";
 
 let shoppingCart: ShoppingCartInfo[] = [
   {
@@ -48,11 +48,17 @@ let shoppingCart: ShoppingCartInfo[] = [
     ],
   },
 ];
+let userInfo: UserInfo = {
+  user_id: 0,
+  user_name: "用户名称",
+  user_avatar: "https://dummyimage.com/400X400",
+  user_phone: "13385030987",
+};
 
 export const useStore = defineStore("ShoppingCart", {
   state: () => {
     return {
-      user_id: 0,
+      userInfo,
       shoppingCart,
     };
   },
@@ -60,9 +66,11 @@ export const useStore = defineStore("ShoppingCart", {
     // 添加商品到购物车
     addGoodIntoShoppingCart(good_id: number) {
       const good = this.shoppingCart.find((item) => item.item_id === good_id);
-      if (good) { // 如果购物车中已经有该商品，则数量加一
+      if (good) {
+        // 如果购物车中已经有该商品，则数量加一
         good.item_count++;
-      } else { // 如果购物车中没有该商品，则添加该商品
+      } else {
+        // 如果购物车中没有该商品，则添加该商品
         this.shoppingCart.push({
           item_choose: false,
           item_id: good_id,

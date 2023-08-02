@@ -7,6 +7,18 @@
   },
   "pages": [
     {
+      "path": "pages/personalCenter/myOrders",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
+      "path": "pages/personalCenter/personalCenter",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
       "path": "pages/home/home",
       "style": {
         "navigationBarTitleText": "主页"
@@ -58,12 +70,6 @@
       "path": "pages/goodsDetail/goodsDetail",
       "style": {
         "navigationBarTitleText": "商品信息"
-      }
-    },
-    {
-      "path": "pages/personalCenter/personalCenter",
-      "style": {
-        "navigationBarTitleText": "个人中心"
       }
     }
   ],
